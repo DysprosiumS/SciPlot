@@ -46,3 +46,9 @@ TotalInt = intg.trapz(ydata, xdata)  # Compute numerical integral
 TotalInt_func = intg.quad(func, 0, 4, args=(1.375))[0]  # Compute integral of function
 low_Frac = intg.quad(func, 0, 2, args=(1.375))[0] / TotalInt_func
 high_Frac = intg.quad(func, 2, 4, args=(1.375))[0] / TotalInt_func
+
+#This is calculation part
+
+#variables
+thermoFrequency = 100 # print out frequency of MSD data
+timeStep = 0.5 #fps
