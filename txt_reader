@@ -1,0 +1,24 @@
+import csv
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Read the txt file
+with open('text.txt', 'r') as file:
+    num_points = len(file.readlines())
+#    print(num_points)
+    points = []
+    for i in range(num_points):
+        x, y = map(float, file.readline().split('\n'))
+        print(x,y) # Read the coordinates
+        points.append((x, y))
+
+# Separate the x and y coordinates
+x_coords = [point[0] for point in points]
+y_coords = [point[1] for point in points]
+
+# Plot the points
+plt.scatter(x_coords, y_coords)
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.title('Plot of Points')
+plt.show()
