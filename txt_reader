@@ -13,11 +13,11 @@ with open('C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2022
     num_points = len(file.readlines())
 #    print(num_points)
     points = []
-    for line in file:
-        print(line)
+#    for line in file:
+#        print(line)
 
     for i in range(num_points):
-        line = file.readline().split('\n')
+        line = file.readline().split()
         print(line)
         try:
             x, y = map(float, line)
