@@ -1,0 +1,33 @@
+mport math
+
+#calculating displacements
+
+filename = "sample.txt"
+points = []
+
+def calculate_displacement(x1, y1, x2, y2):
+    return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+
+def calculate_displacements(points):
+    displacements = []
+    for i in range(len(points)-1):
+        x1, y1 = points[i]
+        x2, y2 = points[i+1]
+        displacement = calculate_displacement(x1, y1, x2, y2)
+        displacements.append(displacement)
+    return displacements
+
+
+
+# Read coordinates from the text file
+with open(filename, 'r') as file:
+    for line in file:
+        coordinates = line.strip().split()
+        points.append((float(coordinates[0]), float(coordinates[1])))
+
+# Calculate displacements between neighboring points
+displacements = calculate_displacements(points)
+
+# Print the displacements
+for i, displacement in enumerate(displacements):
+    print(f"Displacement between point {i+1} and point {i+2}: {displacement}")
