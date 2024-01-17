@@ -10,6 +10,7 @@ fps = 14.62  # frames per 1 second
 
 filename = 'C:/Users/17.3 Active Systems/Desktop/example1.txt'
 displ_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2022.2/scratches/res1.txt'
+vel_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2022.2/scratches/res2.txt'
 points = []
 
 # Read coordinates from the text file
@@ -49,4 +50,28 @@ with open(displ_file, 'w') as result_file1:
 result_file1.close()
 
 # Calculate velocities
+def calculate_velocity (displacement):
+    return displacement*fps
+
+def calculate_velocities (displacements):
+    velocities = []
+    for i in range(len(displacements) - 1):
+        displacement = displacements[i]
+        velocity = calculate_velocity(displacement)
+        velocities.append(velocity)
+    return velocities
+
+velocities = calculate_velocities(displacements)
+
+# Print the velocities
+for velocity in velocities:
+        print(f"Velocity: {velocity}")
+
+# Create a file with velocities
+with open(vel_file, 'w') as result_file2:
+    for velocity in velocities:
+        result_file2.write(''.join(str(velocity)))
+        result_file2.write('\n')
+result_file2.close()
+
 
