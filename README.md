@@ -5,3 +5,7 @@
 4.Draw an empty plot. Choose necessary scale and axes type according to your data
 4.Start a loop that adding any point of your data to the plot. Add a lables, supportive lines, grid
 5.Code to calculate activity parameters via msd, diffusion coefficient etc.
+
+!New!
+
+Create 2 empty txt files and copy their paths to this code.
