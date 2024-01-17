@@ -1,0 +1,32 @@
+# import necessary libs for data processing
+import numpy as np
+import pandas as pd
+import csv
+from matplotlib import pyplot as plt
+from scipy.optimize import curve_fit
+from scipy import integrate as intg
+
+# input a way to the csv file with xy coordinates
+# FileName = input()
+
+exampledata = pd.read_csv("C:/Users/17.3 Active Systems/Downloads/csvsample.csv")
+xdata = exampledata['x']
+ydata = exampledata['y']
+#with open("C:/Users/17.3 Active Systems/Downloads/csvsample.csv", 'r') as i:  # open a file in directory of this script for reading
+#    rawdata = list(csv.reader(i, delimiter=","))  # make a list of data in file (one list to both coords)
+
+# code from smbd github. Creating arrays of coordinates of both axes
+#exampledata = np.array(rawdata[1:], dtype=np.float)  # convert to data array
+#xdata = exampledata[:, 0]
+#ydata = exampledata[:, 1]
+
+# plotting trajectories
+plt.figure(1, dpi=120)
+plt.yscale('linear')
+plt.xscale('linear')
+# plt.xlim(0,4)
+# plt.ylim(0,2.5)
+plt.title("Example Data")
+plt.xlabel(rawdata[0][0])
+plt.ylabel(rawdata[0][1])
+plt.plot(xdata, ydata, label="Experimental Data")
