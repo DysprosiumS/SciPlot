@@ -31,3 +31,10 @@ displacements = calculate_displacements(points)
 # Print the displacements
 for i, displacement in enumerate(displacements):
     print(f"Displacement between point {i+1} and point {i+2}: {displacement}")
+
+#Create a file with displacements
+with open(result_file, 'w') as final_file:
+ for displacement in displacements:
+        final_file.write(''.join(str(displacement))
+        final_file.write('\n')
+final_file.close()
