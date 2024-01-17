@@ -1,38 +1,52 @@
-mport math
+import math
+import os
 
-#calculating displacements
+# calculating displacements
 
-filename = "sample.txt"
+# filename = "sample.txt"
+
+# Parameters of our experimental setup
+fps = 14.62  # frames per 1 second
+
+filename = 'C:/Users/17.3 Active Systems/Desktop/example1.txt'
+displ_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2022.2/scratches/res1.txt'
 points = []
-
-def calculate_displacement(x1, x2):
-    return abs(x2-x1)
-
-def calculate_displacements(points):
-    displacements = []
-    for i in range(len(points)-1):
-        x1 = points[i]
-        x2 = points[i+1]
-        displacement = calculate_displacement(x1, x2)
-        displacements.append(displacement)
-    return displacements
 
 # Read coordinates from the text file
 with open(filename, 'r') as file:
     for line in file:
         coordinates = line.strip().split()
-        points.append((float(coordinates[0]), float(coordinates[1])))
+        points.append(float(coordinates[0]))
+
+
+def calculate_displacement(x1, x2):
+    return abs(x2 - x1)
+
+
+def calculate_displacements(points):
+    displacements = []
+    for i in range(len(points) - 1):
+        x1 = points[i]
+        x2 = points[i + 1]
+        displacement = calculate_displacement(x1, x2)
+        displacements.append(displacement)
+    return displacements  # in pixels without transition
+
 
 # Calculate displacements between neighboring points
 displacements = calculate_displacements(points)
 
 # Print the displacements
-for i, displacement in enumerate(displacements):
-    print(f"Displacement between point {i+1} and point {i+2}: {displacement}")
+with open(filename, 'a') as result_file1:
+    for i, displacement in enumerate(displacements):
+        print(f"Displacement between point {i + 1} and point {i + 2}: {displacement}")
 
-#Create a file with displacements
-with open(result_file, 'w') as final_file:
- for displacement in displacements:
-        final_file.write(''.join(str(displacement))
-        final_file.write('\n')
-final_file.close()
+# Create a file with displacements
+with open(displ_file, 'w') as result_file1:
+    for displacement in displacements:
+        result_file1.write(''.join(str(displacement)))
+        result_file1.write('\n')
+result_file1.close()
+
+# Calculate velocities
+
