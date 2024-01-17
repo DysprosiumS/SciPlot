@@ -5,19 +5,17 @@ mport math
 filename = "sample.txt"
 points = []
 
-def calculate_displacement(x1, y1, x2, y2):
-    return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+def calculate_displacement(x1, x2):
+    return abs(x2-x1)
 
 def calculate_displacements(points):
     displacements = []
     for i in range(len(points)-1):
-        x1, y1 = points[i]
-        x2, y2 = points[i+1]
-        displacement = calculate_displacement(x1, y1, x2, y2)
+        x1 = points[i]
+        x2 = points[i+1]
+        displacement = calculate_displacement(x1, x2)
         displacements.append(displacement)
     return displacements
-
-
 
 # Read coordinates from the text file
 with open(filename, 'r') as file:
