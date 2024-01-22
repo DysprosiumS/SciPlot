@@ -12,6 +12,7 @@ fps = 14.62  # frames per 1 second
 filename = 'C:/Users/17.3 Active Systems/Desktop/example1.txt'
 displ_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2022.2/scratches/res1.txt'
 vel_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2022.2/scratches/res2.txt'
+acc_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2022.2/scratches/res3.txt'
 points = []
 
 # Read coordinates from the text file
