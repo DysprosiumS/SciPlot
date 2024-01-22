@@ -18,7 +18,7 @@ points = []
 # Read coordinates from the text file
 with open(filename, 'r') as file:
     for line in file:
-        coordinates = line.strip().split()
+        coordinates = line.strip().split() #Split our file for every line. Add these lines in array of coordinates
         points.append(float(coordinates[0]))
 
 # Calculating displacements
@@ -77,19 +77,21 @@ with open(vel_file, 'w') as result_file2:
 result_file2.close()
 
 #Calculate accelerations
-def calculate_acceleration (velocity):
-    acceleration = velocity*fps
+def calculate_acceleration (velocity1, velocity2):
+    acceleration = abs(velocity2 - velocity1)*fps
     return acceleration
 
 def calculate_accelerations (velocities):
     accelerations = []
     for i in range (len(velocities)):
-        velocity = velocities[i]
+        velocity1 = velocities[i]
+        velocity2 = velocities[i+1]
         acceleration = calculate_acceleration(velocity)
-        
+
         accelerations = [*accelerations, acceleration]
 
     return accelerations
+
 
 accelerations = calculate_accelerations(velocities)
 
