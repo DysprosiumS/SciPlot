@@ -8,4 +8,7 @@
 
 !New!
 
-Create 2 empty txt files and copy their paths to this code.
+Create 3 empty txt files and copy their paths to this code.
+
+!Attention!
+Dont forget to delete printing parts before use - these are only for cheking possible errors in calculation.
