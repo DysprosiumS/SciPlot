@@ -1,13 +1,14 @@
 import math
 import os
 
-# calculating displacements
+
 
 # filename = "sample.txt"
 
 # Parameters of our experimental setup
 fps = 14.62  # frames per 1 second
 
+#Filenames and filepaths
 filename = 'C:/Users/17.3 Active Systems/Desktop/example1.txt'
 displ_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2022.2/scratches/res1.txt'
 vel_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2022.2/scratches/res2.txt'
@@ -19,7 +20,7 @@ with open(filename, 'r') as file:
         coordinates = line.strip().split()
         points.append(float(coordinates[0]))
 
-
+# Calculating displacements
 def calculate_displacement(x1, x2):
     return abs(x2 - x1)
 
