@@ -83,11 +83,10 @@ def calculate_acceleration (velocity1, velocity2):
 
 def calculate_accelerations (velocities):
     accelerations = []
-    for i in range (len(velocities) - 1):
+    for i in range(len(velocities) - 1):
         velocity1 = velocities[i]
         velocity2 = velocities[i+1]
         acceleration = calculate_acceleration(velocity1, velocity2)
-
         accelerations = [*accelerations, acceleration]
 
     return accelerations
