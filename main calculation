@@ -74,4 +74,31 @@ with open(vel_file, 'w') as result_file2:
         result_file2.write('\n')
 result_file2.close()
 
+#Calculate accelerations
+def calculate_acceleration (velocity):
+    acceleration = velocity*fps
+    return acceleration
+
+def calculate_accelerations (velocities):
+    accelerations = []
+    for i in range (len(velocities)):
+        velocity = velocities[i]
+        acceleration = calculate_acceleration(velocity)
+        
+        accelerations = [*accelerations, acceleration]
+
+    return accelerations
+
+accelerations = calculate_accelerations(velocities)
+
+#Print accelerations
+for acceleration in accelerations:
+    print(f"Acceleration: {acceleration}")
+
+# Create a file with accelerations
+with open(acc_file, 'w') as result_file3:
+    for acceleration in accelerations:
+        result_file3.write(''.join(str(acceleration)))
+        result_file3.write('\n')
+result_file3.close()
 
