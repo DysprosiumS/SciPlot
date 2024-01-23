@@ -1,12 +1,21 @@
 import math
 import os
+'''
+Before run this script:
+1. Set your experimental parameters in the head of this code (# Parameters...).
+2. Create 4 empty txt files for calculations
+3. Write a paths to data file and empty files on "Filenames..." part
+'''
 
-
-
-# filename = "sample.txt"
+# Physical parameters and constants
+particle_density = 1.5 #[g/cm^3] MF
+coating_density = 8.92 #[g/cm^3] Cu
 
 # Parameters of our experimental setup
 fps = 14.62  # frames per 1 second
+w = 0.5 #Coverage rate
+Rp = 5 #Radius of uncoated particle, [mkm]
+dc = 0.1 #Thickness of coating, [mkm]
 
 #Filenames and filepaths
 filename = 'C:/Users/17.3 Active Systems/Desktop/example1.txt'
