@@ -22,6 +22,14 @@ filename = 'C:/Users/17.3 Active Systems/Desktop/example1.txt'
 displ_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2022.2/scratches/res1.txt'
 vel_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2022.2/scratches/res2.txt'
 acc_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2022.2/scratches/res3.txt'
+
+# Calculation of particle parameters
+Volume_particle = 4/3*math.pi*Rp**3 #[mkm^3]
+Volume_coating = 4/3*w*math.pi*((Rp+dc)**3-Rp**3)#[mkm^3]
+Volume_particle /= 10**12 #[cm^3]
+Volume_coating /= 10**12 #[cm^3]
+Mass = particle_density*Volume_particle + coating_density*Volume_coating #[g]
+
 points = []
 
 # Read coordinates from the text file
