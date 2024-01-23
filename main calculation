@@ -123,3 +123,52 @@ with open(acc_file, 'w') as result_file3:
         result_file3.write('\n')
 result_file3.close()
 
+#Calculate kinetic energies
+def calculate_kin_en (velocity):
+    kin_en = 0.5*Mass*(velocity)**2
+    return kin_en
+
+def calculate_kin_ens(velocities):
+    kin_ens = []
+    for i in range(len(velocities)):
+        velocity = velocities[i]
+        kin_en = calculate_kin_en(velocity)
+        kin_ens = [*kin_ens, kin_en]
+    return kin_ens
+
+kin_ens = calculate_kin_ens(velocities)
+
+#Print kinetic energies
+for energy in kin_ens:
+    print(f"Kinetic energy: {energy}")
+
+# Create a file with kinetic energies
+with open(kin_en_file, 'w') as result_file4:
+    for energy in kin_ens:
+        result_file4.write(''.join(str(energy)))
+        result_file4.write('\n')
+result_file4.close()#Calculate kinetic energies
+def calculate_kin_en (velocity):
+    kin_en = 0.5*Mass*(velocity)**2
+    return kin_en
+
+def calculate_kin_ens(velocities):
+    kin_ens = []
+    for i in range(len(velocities)):
+        velocity = velocities[i]
+        kin_en = calculate_kin_en(velocity)
+        kin_ens = [*kin_ens, kin_en]
+    return kin_ens
+
+kin_ens = calculate_kin_ens(velocities)
+
+#Print kinetic energies
+for energy in kin_ens:
+    print(f"Kinetic energy: {energy}")
+
+# Create a file with kinetic energies
+with open(kin_en_file, 'w') as result_file4:
+    for energy in kin_ens:
+        result_file4.write(''.join(str(energy)))
+        result_file4.write('\n')
+result_file4.close()
