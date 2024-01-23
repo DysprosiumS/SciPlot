@@ -29,6 +29,7 @@ Volume_coating = 4/3*w*math.pi*((Rp+dc)**3-Rp**3)#[mkm^3]
 Volume_particle /= 10**12 #[cm^3]
 Volume_coating /= 10**12 #[cm^3]
 Mass = particle_density*Volume_particle + coating_density*Volume_coating #[g]
+Mass /= 1000 #[kg]
 
 points = []
 
