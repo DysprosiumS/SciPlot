@@ -1,9 +1,10 @@
 import math
+import numpy as np
 import os
 '''
 Before run this script:
 1. Set your experimental parameters in the head of this code (# Parameters...).
-2. Create 4 empty txt files for calculations
+2. Create 5 empty txt files for calculations
 3. Write a paths to data file and empty files on "Filenames..." part
 '''
 
@@ -22,6 +23,7 @@ filename = 'C:/Users/17.3 Active Systems/Desktop/example1.txt'
 displ_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2022.2/scratches/res1.txt'
 vel_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2022.2/scratches/res2.txt'
 acc_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2022.2/scratches/res3.txt'
+mean_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2022.2/scratches/stat.txt'
 
 # Calculation of particle parameters
 Volume_particle = 4/3*math.pi*Rp**3 #[mkm^3]
@@ -82,6 +84,7 @@ def calculate_velocities (displacements):
     return velocities
 
 velocities = calculate_velocities(displacements)
+mean_velocity = np.mean(velocities)
 
 # Print the velocities
 for velocity in velocities:
@@ -111,6 +114,7 @@ def calculate_accelerations (velocities):
 
 
 accelerations = calculate_accelerations(velocities)
+mean_acceleration = np.mean(accelerations)
 
 #Print accelerations
 for acceleration in accelerations:
@@ -161,6 +165,7 @@ def calculate_kin_ens(velocities):
     return kin_ens
 
 kin_ens = calculate_kin_ens(velocities)
+mean_kin_energy = np.mean(kin_ens)
 
 #Print kinetic energies
 for energy in kin_ens:
@@ -172,3 +177,13 @@ with open(kin_en_file, 'w') as result_file4:
         result_file4.write(''.join(str(energy)))
         result_file4.write('\n')
 result_file4.close()
+
+#Create a file with mean parameters
+with open(mean_file, 'w') as stat_file:
+    stat_file.write("Mean velocity: " + str(mean_velocity))
+    stat_file.write('\n')
+    stat_file.write("Mean acceleration: " + str(mean_acceleration))
+    stat_file.write('\n')
+    stat_file.write("Mean kinetic energy: " + str(mean_kin_energy))
+    stat_file.write('\n')
+stat_file.close()
