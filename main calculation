@@ -14,6 +14,7 @@ coating_density = 8.92 #[g/cm^3] Cu
 
 # Parameters of our experimental setup
 fps = 14.62  # frames per 1 second
+#Scale = 0.00001 [mkm/px]
 w = 0.5 #Coverage rate
 Rp = 5 #Radius of uncoated particle, [mkm]
 dc = 0.1 #Thickness of coating, [mkm]
