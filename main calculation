@@ -39,6 +39,7 @@ points = []
 # Read coordinates from the text file
 with open(filename, 'r') as file:
     for line in file:
+        line = line.replace('+', '') #for shit files that has pluses
         coordinates = line.strip().split() #Split our file for every line. Add these lines in array of coordinates
         points.append(float(coordinates[0]))
 
