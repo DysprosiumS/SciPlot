@@ -30,17 +30,18 @@ def calculate_displacements(column):
     for i in range(columns_number - 1):
         x1 = column[i]
         x2 = column[i + 1]
-        displacement = calculate_displacement(x1, x2) #* Scale
+        displacement = calculate_displacement(x1, x2) * Scale #in [mkm]
         displacements.append(displacement)
     return displacements
 
 for i in range(columns_number):
     current_column = [row[i] for row in coords] #reading data from every column
-    print(current_column)
+#    print(current_column)
     displacements = calculate_displacements(current_column)# Calculate displacements between neighboring points
-    print(displacements)
+#    print(displacements)
     with open(displ_file, 'w') as result_file1:
-     for displacement in displacements:
-        result_file1.write(''.join(str(displacement)))
-        result_file1.write('\n')
+       for displacement in displacements:
+          result_file1.write(''.join(str(displacement)))
+          result_file1.write('\n')
+
 result_file1.close()
