@@ -13,8 +13,10 @@ for line in lines:
 
 file.close()
 
-np.array(coords)
+coords =np.array(coords)
 print(coords)
+columns_number = coords.shape[1]
+print(columns_number)
 
 # Calculating displacements
 def calculate_displacement(x1, x2):
@@ -22,13 +24,14 @@ def calculate_displacement(x1, x2):
 
 def calculate_displacements(column):
     displacements = []
-    for i in range(len(column[0]) - 1):
+    for i in range(columns_number - 1):
         x1 = column[i]
         x2 = column[i + 1]
         displacement = calculate_displacement(x1, x2) #* Scale
         displacements.append(displacement)
     return displacements
 
-for i in range(len(coords[0])):
+for i in range(columns_number):
     current_column = [row[i] for row in coords] #reading data from every column
     displacements = calculate_displacements(current_column)# Calculate displacements between neighboring points
+print(displacements)
