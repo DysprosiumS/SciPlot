@@ -1,0 +1,34 @@
+import numpy as np
+
+filename = 'C:/Users/17.3 Active Systems/Desktop/example2.txt'
+with open(filename, 'r') as file:
+    lines = file.readlines()
+
+coords = []
+
+for line in lines:
+    values = line.strip().split()
+    converted_values = [float(value) for value in values]
+    coords.append(converted_values)
+
+file.close()
+
+np.array(coords)
+print(coords)
+
+# Calculating displacements
+def calculate_displacement(x1, x2):
+    return abs(x2 - x1)
+
+def calculate_displacements(column):
+    displacements = []
+    for i in range(len(column[0]) - 1):
+        x1 = column[i]
+        x2 = column[i + 1]
+        displacement = calculate_displacement(x1, x2) #* Scale
+        displacements.append(displacement)
+    return displacements
+
+for i in range(len(coords[0])):
+    current_column = [row[i] for row in coords] #reading data from every column
+    displacements = calculate_displacements(current_column)# Calculate displacements between neighboring points
