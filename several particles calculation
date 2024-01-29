@@ -15,8 +15,8 @@ file.close()
 
 coords =np.array(coords)
 print(coords)
+rows_number = coords.shape[0]
 columns_number = coords.shape[1]
-print(columns_number)
 
 # Calculating displacements
 def calculate_displacement(x1, x2):
