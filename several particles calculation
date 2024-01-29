@@ -43,5 +43,8 @@ for i in range(columns_number):
        for displacement in displacements:
           result_file1.write(''.join(str(displacement)))
           result_file1.write('\n')
+#       result_file1.write('\t')
 
 result_file1.close()
+
+
