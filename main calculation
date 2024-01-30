@@ -80,7 +80,7 @@ def calculate_velocity (displacement):
 
 def calculate_velocities (displacements):
     velocities = []
-    for i in range(len(displacements) - 1):
+    for i in range(len(displacements)):
         displacement = displacements[i]
         velocity = calculate_velocity(displacement)
         velocities.append(velocity)
