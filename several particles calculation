@@ -1,7 +1,15 @@
 import numpy as np
+'''
+import csv
+from itertools import zip_longest
+'''
 
 filename = 'C:/Users/17.3 Active Systems/Desktop/example2.txt'
 displ_file = 'C:/Users/17.3 Active Systems/Desktop/calculation/displ.txt'
+#csv_d = 'C:/Users/17.3 Active Systems/Desktop/calculation/displ.csv'
+
+# Parameters of our experimental setup
+Scale = 0.3 #scale of our recording, [mkm/px]
 
 with open(filename, 'r') as file:
     lines = file.readlines()
@@ -19,7 +27,12 @@ coords =np.array(coords)
 #print(coords)
 rows_number = coords.shape[0]
 columns_number = coords.shape[1]
+'''
+columns_data = zip_longest(*coords)
 
+with open (csv_d, 'w') as file:
+    writer = csv.writer(file)
+    writer.writerows(columns_data)
 
 # Calculating displacements
 def calculate_displacement(x1, x2):
@@ -46,5 +59,13 @@ for i in range(columns_number):
 #       result_file1.write('\t')
 
 result_file1.close()
+'''
+displ_list=[]
+for i in range(columns_number):
+    column_data = [row[i] for row in coords]
+    displacements = np.abs(np.diff(column_data))
+    displ_list.append(displacements)
+    print(displ_list)
 
+np.savetxt(displ_list, delimiter='\t', fmt='%f')
 
