@@ -154,7 +154,9 @@ with open(kin_en_file, 'w') as result_file4:
     for energy in kin_ens:
         result_file4.write(''.join(str(energy)))
         result_file4.write('\n')
-result_file4.close()#Calculate kinetic energies
+result_file4.close()
+
+#Calculate kinetic energies
 def calculate_kin_en (velocity):
     kin_en = 0.5*Mass*(velocity)**2
     return kin_en
