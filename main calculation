@@ -56,7 +56,7 @@ def calculate_displacements(points):
         x2 = points[i + 1]
         displacement = calculate_displacement(x1, x2) * Scale
         displacements.append(displacement)
-    return displacements  # in pixels without transition
+    return displacements  # in [mkm]
 
 
 # Calculate displacements between neighboring points
