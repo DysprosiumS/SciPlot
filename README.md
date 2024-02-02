@@ -6,9 +6,12 @@
 4.Start a loop that adding any point of your data to the plot. Add a lables, supportive lines, grid
 5.Code to calculate activity parameters via msd, diffusion coefficient etc.
 
+#main calc
+Calculates different dynamic parameters using one-axes coord file
+
 !New!
 
-Create 4 empty txt files and copy their paths to this code.
+Create 6 empty txt files and copy their paths to this code.
 
 !Attention!
 Dont forget to delete printing parts before use - these are only for cheking possible errors in calculation.
