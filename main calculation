@@ -4,7 +4,7 @@ import os
 '''
 Before run this script:
 1. Set your experimental parameters in the head of this code (# Parameters...).
-2. Create 5 empty txt files for calculations
+2. Create 6 empty txt files for calculations
 3. Write a paths to data file and empty files on "Filenames..." part
 '''
 
@@ -25,6 +25,7 @@ displ_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2
 vel_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2022.2/scratches/res2.txt'
 acc_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2022.2/scratches/res3.txt'
 kin_en_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2022.2/scratches/res4.txt'
+work_file = 'C:/Users/Senos/OneDrive/Рабочий стол/test calc/work.txt'
 mean_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2022.2/scratches/stat.txt'
 
 # Calculation of particle parameters
@@ -84,7 +85,7 @@ def calculate_velocities (displacements):
         displacement = displacements[i]
         velocity = calculate_velocity(displacement)
         velocities.append(velocity)
-    return velocities
+    return velocities # in [mkm/s]
 
 velocities = calculate_velocities(displacements)
 mean_velocity = np.mean(velocities)
@@ -113,7 +114,7 @@ def calculate_accelerations (velocities):
         acceleration = calculate_acceleration(velocity1, velocity2)
         accelerations = [*accelerations, acceleration]
 
-    return accelerations
+    return accelerations # in [mkm/s^2]
 
 
 accelerations = calculate_accelerations(velocities)
@@ -141,7 +142,7 @@ def calculate_kin_ens(velocities):
         velocity = velocities[i]
         kin_en = calculate_kin_en(velocity)
         kin_ens = [*kin_ens, kin_en]
-    return kin_ens
+    return kin_ens # in [kg*mkm^2/s^2]
 
 kin_ens = calculate_kin_ens(velocities)
 
@@ -182,6 +183,34 @@ with open(kin_en_file, 'w') as result_file4:
         result_file4.write(''.join(str(energy)))
         result_file4.write('\n')
 result_file4.close()
+
+#Calculate work of forces
+def calculate_work (acceleration, displacement):
+    forc_work = Mass*acceleration*displacement
+    return forc_work
+
+def calculate_works(accelerations, displacements):
+    forc_works = []
+    for i in range(len(accelerations)):
+        acceleration = accelerations[i]
+        displacement = displacements[i]
+        forc_work = calculate_work(acceleration, displacement)
+        forc_works = [*forc_works, forc_work]
+    return forc_works # in [kg*mkm^2/s^2]
+
+forc_works = calculate_works(accelerations, displacements)
+mean_forc_work = np.mean(forc_works)
+
+#Print works of forces
+for work in forc_works:
+    print(f"Work: {work}")
+
+# Create a file with forces work
+with open(work_file, 'w') as result_file5:
+    for work in forc_works:
+        result_file5.write(''.join(str(work)))
+        result_file5.write('\n')
+result_file5.close()
 
 #Create a file with mean parameters
 with open(mean_file, 'w') as stat_file:
