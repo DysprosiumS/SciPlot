@@ -25,7 +25,7 @@ displ_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2
 vel_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2022.2/scratches/res2.txt'
 acc_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2022.2/scratches/res3.txt'
 kin_en_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2022.2/scratches/res4.txt'
-work_file = 'C:/Users/Senos/OneDrive/Рабочий стол/test calc/work.txt'
+work_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2022.2/scratches/res5.txt'
 mean_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2022.2/scratches/stat.txt'
 
 # Calculation of particle parameters
@@ -141,6 +141,8 @@ def calculate_kin_ens(velocities):
     for i in range(len(velocities)):
         velocity = velocities[i]
         kin_en = calculate_kin_en(velocity)
+#        kin_en = calculate_kin_en(velocity)/10**12  # in [J]
+#        kin_en = calculate_kin_en(velocity)*(10**7)/1.6  # in [eV]
         kin_ens = [*kin_ens, kin_en]
     return kin_ens # in [kg*mkm^2/s^2]
 
@@ -195,6 +197,8 @@ def calculate_works(accelerations, displacements):
         acceleration = accelerations[i]
         displacement = displacements[i]
         forc_work = calculate_work(acceleration, displacement)
+#        forc_work = calculate_work(acceleration, displacement)/10**12  # in [J]
+#        forc_work = calculate_work(acceleration, displacement)*(10**7)/1.6  # in [eV]
         forc_works = [*forc_works, forc_work]
     return forc_works # in [kg*mkm^2/s^2]
 
@@ -219,5 +223,7 @@ with open(mean_file, 'w') as stat_file:
     stat_file.write("Mean acceleration: " + str(mean_acceleration))
     stat_file.write('\n')
     stat_file.write("Mean kinetic energy: " + str(mean_kin_energy))
+    stat_file.write('\n')
+    stat_file.write("Mean work of forces: " + str(mean_forc_work))
     stat_file.write('\n')
 stat_file.close()
