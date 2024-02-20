@@ -100,9 +100,7 @@ kin_ens = calculate_kin_ens(velocities)
 
 # Create a file with kinetic energies
 with open(kin_en_file, 'w') as result_file4:
-    for energy in kin_ens:
-        result_file4.write(''.join(str(energy)))
-        result_file4.write('\n')
+    result_file4.write(str(mean_kin_energy))
 result_file4.close()
 
 
