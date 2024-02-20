@@ -1,0 +1,108 @@
+import math
+'''
+Before run this script:
+1. Set your experimental parameters in the head of this code (# Parameters...).
+2. Create 6 empty txt files for calculations
+3. Write a paths to data file and empty files on "Filenames..." part
+'''
+
+# Physical parameters and constants
+particle_density = 1.5 #[g/cm^3] MF
+coating_density = 8.92 #[g/cm^3] Cu
+
+# Parameters of our experimental setup
+fps = 400  # frames per 1 second
+Scale = 13.4 #scale of our recording, [mkm/px]
+w = 1 #Coverage rate
+Rp = 2.1 #Radius of uncoated particle, [mkm]
+dc = 0.1 #Thickness of coating, [mkm]
+
+#Filenames and filepaths
+filename = 'C:/Users/17.3 Active Systems/Desktop/calculation/X1000.txt'
+#displ_file = 'C:/Users/17.3 Active Systems/Desktop/calculation/displ.txt'
+#vel_file = 'C:/Users/17.3 Active Systems/Desktop/calculation/vel.txt'
+kin_en_file = 'C:/Users/17.3 Active Systems/Desktop/calculation/en.txt'
+
+
+# Calculation of particle parameters
+Volume_particle = 4/3*math.pi*Rp**3 #[mkm^3]
+Volume_coating = 4/3*w*math.pi*((Rp+dc)**3-Rp**3)#[mkm^3]
+Volume_particle /= 10**12 #[cm^3]
+Volume_coating /= 10**12 #[cm^3]
+Mass = particle_density*Volume_particle + coating_density*Volume_coating #[g]
+Mass /= 1000 #[kg]
+
+points = []
+
+# Read coordinates from the text file
+with open(filename, 'r') as file:
+    lines = file.readlines()
+    for line in lines:
+        line = line.replace('+', '') #for shit files that has pluses
+        coordinates = line.strip().split('\t') #Split our file for every line. Add these lines in array of coordinates
+        if not any(coordinates):
+            continue
+
+        points.append(float(coordinates[0]))
+#        print(points)
+
+
+# Calculating displacements
+def calculate_displacement(x1, x2):
+    return abs(x2 - x1)
+
+
+def calculate_displacements(points):
+    displacements = []
+    for i in range(len(points) - 1):
+        x1 = points[i]
+        x2 = points[i + 1]
+        displacement = calculate_displacement(x1, x2) * Scale
+        displacements.append(displacement)
+    return displacements  # in [mkm]
+
+
+# Calculate displacements between neighboring points
+displacements = calculate_displacements(points)
+
+
+# Calculate velocities
+def calculate_velocity (displacement):
+    return displacement*fps
+
+def calculate_velocities (displacements):
+    velocities = []
+    for i in range(len(displacements)):
+        displacement = displacements[i]
+        velocity = calculate_velocity(displacement)
+        velocities.append(velocity)
+    return velocities # in [mkm/s]
+
+velocities = calculate_velocities(displacements)
+
+
+#Calculate kinetic energies
+def calculate_kin_en (velocity):
+    kin_en = 0.5*Mass*(velocity)**2
+    return kin_en
+
+def calculate_kin_ens(velocities):
+    kin_ens = []
+    for i in range(len(velocities)):
+        velocity = velocities[i]
+        kin_en = calculate_kin_en(velocity)
+#        kin_en = calculate_kin_en(velocity)/10**12  # in [J]
+        kin_en = calculate_kin_en(velocity)*(10**7)/1.6  # in [eV]
+        kin_ens = [*kin_ens, kin_en]
+    return kin_ens # in [kg*mkm^2/s^2]
+
+kin_ens = calculate_kin_ens(velocities)
+
+# Create a file with kinetic energies
+with open(kin_en_file, 'w') as result_file4:
+    for energy in kin_ens:
+        result_file4.write(''.join(str(energy)))
+        result_file4.write('\n')
+result_file4.close()
+
+
