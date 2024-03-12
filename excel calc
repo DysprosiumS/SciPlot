@@ -1,16 +1,86 @@
 import pandas as pd
 import numpy as np
-
+# Parameters of our experimental setup
+# frames per 1 second
+fps = 14.62
+# scale of our recording, [mkm/px]
+Scale = 0.3
 # if your file is tab delimited
-df = pd.read_csv('C:/Users/1/Desktop/test/X1000.txt', sep='\t', header=None)
-df.to_excel('C:/Users/1/Desktop/test/output.xlsx', 'Sheet1', index=False,
-header=False)
-
+coordsx = pd.read_csv('C:/Users/1/Desktop/test/X1000.txt', sep='\t', header=None)
+coordsx.dropna(axis=1, inplace=True)
+coordsx.to_excel('C:/Users/1/Desktop/test/coordX.xlsx', 'Sheet1', index=False, header=False)
 # open saved exel file
-frame = pd.read_excel('C:/Users/1/Desktop/test/output.xlsx', header=None)
-col = len(frame.columns)
-ind = len(frame.index)
+# frame = pd.read_excel('C:/Users/1/Desktop/test/output.xlsx', header=None)
+# number of particles
+colx = len(coordsx.columns)
+# number of frames
+indx = len(coordsx.index)
+# Calculating displacements
+
+
+def calculate_displacementx(coordsx):
+    displx = pd.DataFrame(0, index=np.arange(indx-1), columns=np.arange(colx), dtype=np.float64)
+    for j in range(colx):
+        for i in range(indx - 1):
+            x1 = coordsx.iat[i, j]
+            x2 = coordsx.iat[i+1, j]
+            displx.iat[i, j] = abs(x2 - x1)*Scale
+    return displx
+
+
+# Calculate displacements between neighboring points
+displx = calculate_displacementx(coordsx)
 
 # set data for save
-frame.to_excel('C:/Users/1/Desktop/test/data2.xlsx', 'Sheet1', index=False,
-header=False)
+displx.to_excel('C:/Users/1/Desktop/test/displacementX.xlsx', 'Sheet1', index=False, header=False)
+
+coordsy = pd.read_csv('C:/Users/1/Desktop/test/Y1000.txt', sep='\t', header=None)
+coordsy.dropna(axis=1, inplace=True)
+coordsy.to_excel('C:/Users/1/Desktop/test/coordY.xlsx', 'Sheet1', index=False, header=False)
+# open saved exel file
+# frame = pd.read_excel('C:/Users/1/Desktop/test/output.xlsx', header=None)
+# number of particles
+coly = len(coordsy.columns)
+# number of frames
+indy = len(coordsy.index)
+# Calculating displacements
+
+
+def calculate_displacementy(coordsy):
+    disply = pd.DataFrame(0, index=np.arange(indy-1), columns=np.arange(coly), dtype=np.float64)
+    for j in range(coly):
+        for i in range(indy - 1):
+            y1 = coordsy.iat[i, j]
+            y2 = coordsy.iat[i+1, j]
+            disply.iat[i, j] = abs(y2 - y1)*Scale
+    return disply
+
+
+# Calculate displacements between neighboring points
+disply = calculate_displacementy(coordsy)
+
+# set data for save
+disply.to_excel('C:/Users/1/Desktop/test/displacementY.xlsx', 'Sheet1', index=False, header=False)
+
+# 2D displacement
+
+# number of particles
+col2D = len(disply.columns)
+# number of frames
+ind2D = len(disply.index)
+
+def calculate_displacement2D(displx, disply):
+    displ2D = pd.DataFrame(0, index=np.arange(ind2D), columns=np.arange(col2D), dtype=np.float64)
+    for j in range(col2D):
+        for i in range(ind2D):
+            d1 = displx.iat[i, j]
+            d2 = disply.iat[i, j]
+            displ2D.iat[i, j] = ((d2**2 + d1**2)**(1/2))
+    return displ2D
+
+
+# Calculate displacements between neighboring points
+displ2D = calculate_displacement2D(displx, disply)
+
+# set data for save
+displ2D.to_excel('C:/Users/1/Desktop/test/displacement2D.xlsx', 'Sheet1', index=False, header=False)
