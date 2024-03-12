@@ -1,5 +1,16 @@
 import pandas as pd
+import numpy as np
+
 # if your file is tab delimited
 df = pd.read_csv('C:/Users/1/Desktop/test/X1000.txt', sep='\t', header=None)
-df.to_excel("C:/Users/1/Desktop/test/output.xlsx", 'Sheet1', index=False,
+df.to_excel('C:/Users/1/Desktop/test/output.xlsx', 'Sheet1', index=False,
+header=False)
+
+# open saved exel file
+frame = pd.read_excel('C:/Users/1/Desktop/test/output.xlsx', header=None)
+col = len(frame.columns)
+ind = len(frame.index)
+
+# set data for save
+frame.to_excel('C:/Users/1/Desktop/test/data2.xlsx', 'Sheet1', index=False,
 header=False)
