@@ -16,7 +16,7 @@ coating_density = 8.92 #[g/cm^3] Cu
 fps = 14.62  # frames per 1 second
 Scale = 0.3 #scale of our recording, [mkm/px]
 w = 0.5 #Coverage rate
-Rp = 5 #Radius of uncoated particle, [mkm]
+Diameter = 5 #Diameter of uncoated particle, [mkm]
 dc = 0.1 #Thickness of coating, [mkm]
 
 #Filenames and filepaths
@@ -29,6 +29,7 @@ work_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu20
 mean_file = 'C:/Users/17.3 Active Systems/AppData/Roaming/JetBrains/PyCharmEdu2022.2/scratches/stat.txt'
 
 # Calculation of particle parameters
+Rp = Diameter/2
 Volume_particle = 4/3*math.pi*Rp**3 #[mkm^3]
 Volume_coating = 4/3*w*math.pi*((Rp+dc)**3-Rp**3)#[mkm^3]
 Volume_particle /= 10**12 #[cm^3]
