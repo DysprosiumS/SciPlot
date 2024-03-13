@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import math
-from openpyxl import Workbook
 
 # Physical parameters and constants
 particle_density = 1.5 #[g/cm^3] MF
@@ -15,20 +14,24 @@ Diameter = 5 #Diameter of uncoated particle, [mkm]
 dc = 0.1 #Thickness of coating, [mkm]
 
 # Read txt files and save raw data to xlsx tables
-coordsx = pd.read_csv(filepath_or_buffer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/X1000.txt', sep='\t', header=None, float_precision=None)
+coordsx = pd.read_csv(filepath_or_buffer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/X1000.txt', sep='\t',
+                      header=None, float_precision=None)
 coordsx.dropna(axis=1, inplace=True)
-coordsx.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/coordX.xlsx', sheet_name='Sheet1', index=False, header=False, float_format='%.6f')
+coordsx.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/coordX.xlsx', sheet_name='Sheet1',
+                 index=False, header=False, float_format='%.6f')
 coordsy = pd.read_csv('C:/Users/17.3 Active Systems/Desktop/calculation/2D/Y1000.txt', sep='\t', header=None)
 coordsy.dropna(axis=1, inplace=True)
-coordsy.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/coordY.xlsx', sheet_name='Sheet1', index=False, header=False, float_format='%.6f')
+coordsy.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/coordY.xlsx', sheet_name='Sheet1',
+                 index=False, header=False, float_format='%.6f')
 
-# open saved exel file
-# frame = pd.read_excel('C:/Users/1/Desktop/test/output.xlsx', header=None)
 # number of particles
 colx = len(coordsx.columns)
 # number of frames
 indx = len(coordsx.index)
 
+'''
+Code part to calculate displacements
+'''
 # Calculating displacements
 def calculate_displacement(coords):
     displ = pd.DataFrame(data=0, index=np.arange(indx-1), columns=np.arange(colx), dtype=np.float64)
@@ -37,7 +40,8 @@ def calculate_displacement(coords):
             x1 = coords.iat[i, j]
             x2 = coords.iat[i+1, j]
             displ.iat[i, j] = abs(x2 - x1)*Scale
-    return displ
+            displ.iat[i, j] =displ.iat[i, j].round(7)
+    return displ # in [mkm]
 
 # Calculate mean displacement of 2 axes (X and Y)
 def calculate_displacement_2D(displx, disply):
@@ -47,6 +51,7 @@ def calculate_displacement_2D(displx, disply):
             displ_x = displx.iat[i, j]
             displ_y = disply.iat[i, j]
             displ_2D.iat[i, j] = math.sqrt(displ_x**2 + displ_y**2)
+            displ_2D.iat[i, j] =displ_2D.iat[i, j].round(7)
     return displ_2D
 
 # Calculate displacements between neighboring points on X
@@ -55,11 +60,48 @@ displx = calculate_displacement(coordsx)
 disply = calculate_displacement(coordsy)
 
 # Save displacement for both axes
-displx.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/displacementX.xlsx', sheet_name='Sheet1', index=False, header=False)
-disply.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/displacementY.xlsx', sheet_name='Sheet1', index=False, header=False)
+displx.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/displacementX.xlsx',
+                sheet_name='Sheet1', index=False, header=False)
+disply.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/displacementY.xlsx',
+                sheet_name='Sheet1', index=False, header=False)
 
 # Save displacement for 2D
 displ_2D = calculate_displacement_2D(displx,disply)
-displ_2D.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/displ_2D.xlsx', sheet_name='Sheet1', index=False, header=False)
+displ_2D.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/displ_2D.xlsx',
+                  sheet_name='Sheet1', index=False, header=False)
 
+'''
+Code part to calculate velocities
+'''
+# Calculating velocities
+def calculate_velocity(displacements):
+    velocities = pd.DataFrame(data=0, index=np.arange(indx-1), columns=np.arange(colx), dtype=np.float64)
+    for j in range(colx):
+        for i in range(indx - 1):
+            displacement = displacements.iat[i, j]
+            velocities.iat[i, j] = displacement * fps
+            velocities.iat[i, j].round(8)
+    return velocities # in [mkm/s]
 
+# Calculate mean velocity of 2 axes (X and Y)
+def calculate_velocity_2D(velx, vely):
+    vel_2D = pd.DataFrame(data=0, index=np.arange(indx - 1), columns=np.arange(colx), dtype=np.float64)
+    for j in range(colx):
+        for i in range(indx - 1):
+            vel_x = velx.iat[i, j]
+            vel_y = vely.iat[i, j]
+            vel_2D.iat[i, j] = math.sqrt(vel_x**2 + vel_y**2)
+            vel_2D.iat[i, j] = vel_2D.iat[i, j].round(8)
+    return vel_2D
+
+velx = calculate_velocity(displx)
+vely = calculate_velocity(disply)
+vel_2D = calculate_velocity_2D(velx, vely)
+
+#Save velocities
+velx.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/velocityX.xlsx',
+                sheet_name='Sheet1', index=False, header=False)
+vely.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/velocityY.xlsx',
+                sheet_name='Sheet1', index=False, header=False)
+vel_2D.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/vel_2D.xlsx',
+                  sheet_name='Sheet1', index=False, header=False)
