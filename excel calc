@@ -3,16 +3,24 @@ import numpy as np
 import math
 from openpyxl import Workbook
 
-# Parameters of our experimental setup
-# frames per 1 second
-fps = 14.62
-# scale of our recording, [mkm/px]
-Scale = 0.3
+# Physical parameters and constants
+particle_density = 1.5 #[g/cm^3] MF
+coating_density = 8.92 #[g/cm^3] Cu
 
-# if your file is tab delimited
-coordsx = pd.read_csv(filepath_or_buffer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/X1000.txt', sep='\t', header=None, float_precision=None)
+# Parameters of our experimental setup
+fps = 14.62# Frames per 1 second
+Scale = 0.3# Scale of our recording, [mkm/px]
+w = 0.5 #Coverage rate
+Diameter = 5 #Diameter of uncoated particle, [mkm]
+dc = 0.1 #Thickness of coating, [mkm]
+
+# Read txt files and save raw data to xlsx tables
+coordsx = pd.read_csv(filepath_or_buffer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/X1000.txt', sep='\t', header=None, float_precision=None)
 coordsx.dropna(axis=1, inplace=True)
-coordsx.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/coordX.xlsx', sheet_name='Sheet1', index=False, header=False)
+coordsx.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/coordX.xlsx', sheet_name='Sheet1', index=False, header=False, float_format='%.6f')
+coordsy = pd.read_csv('C:/Users/17.3 Active Systems/Desktop/calculation/2D/Y1000.txt', sep='\t', header=None)
+coordsy.dropna(axis=1, inplace=True)
+coordsy.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/coordY.xlsx', sheet_name='Sheet1', index=False, header=False, float_format='%.6f')
 
 # open saved exel file
 # frame = pd.read_excel('C:/Users/1/Desktop/test/output.xlsx', header=None)
@@ -20,9 +28,8 @@ coordsx.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/t
 colx = len(coordsx.columns)
 # number of frames
 indx = len(coordsx.index)
+
 # Calculating displacements
-
-
 def calculate_displacement(coords):
     displ = pd.DataFrame(data=0, index=np.arange(indx-1), columns=np.arange(colx), dtype=np.float64)
     for j in range(colx):
@@ -31,13 +38,6 @@ def calculate_displacement(coords):
             x2 = coords.iat[i+1, j]
             displ.iat[i, j] = abs(x2 - x1)*Scale
     return displ
-
-
-# Calculate displacements between neighboring points on X
-displx = calculate_displacement(coordsx)
-
-# set data for save
-displx.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/displacementX.xlsx', sheet_name='Sheet1', index=False, header=False)
 
 # Calculate mean displacement of 2 axes (X and Y)
 def calculate_displacement_2D(displx, disply):
@@ -49,54 +49,17 @@ def calculate_displacement_2D(displx, disply):
             displ_2D.iat[i, j] = math.sqrt(displ_x**2 + displ_y**2)
     return displ_2D
 
-
-coordsy = pd.read_csv('C:/Users/Senos/OneDrive/Рабочий стол/table calc/Y1000.txt', sep='\t', header=None)
-coordsy.dropna(axis=1, inplace=True)
-coordsy.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/coordY.xlsx', sheet_name='Sheet1', index=False, header=False)
-
+# Calculate displacements between neighboring points on X
+displx = calculate_displacement(coordsx)
 # Calculate displacements between neighboring points on Y
 disply = calculate_displacement(coordsy)
 
+# Save displacement for both axes
+displx.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/displacementX.xlsx', sheet_name='Sheet1', index=False, header=False)
+disply.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/displacementY.xlsx', sheet_name='Sheet1', index=False, header=False)
+
+# Save displacement for 2D
 displ_2D = calculate_displacement_2D(displx,disply)
-displ_2D.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/displ_2D.xlsx', sheet_name='Sheet1', index=False, header=False)
-
-'''
-def calculate_displacementy(coordsy):
-    disply = pd.DataFrame(0, index=np.arange(indy-1), columns=np.arange(coly), dtype=np.float64)
-    for j in range(coly):
-        for i in range(indy - 1):
-            y1 = coordsy.iat[i, j]
-            y2 = coordsy.iat[i+1, j]
-            disply.iat[i, j] = abs(y2 - y1)*Scale
-    return disply
+displ_2D.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/displ_2D.xlsx', sheet_name='Sheet1', index=False, header=False)
 
 
-# Calculate displacements between neighboring points
-disply = calculate_displacementy(coordsy)
-
-# set data for save
-disply.to_excel('C:/Users/1/Desktop/test/displacementY.xlsx', 'Sheet1', index=False, header=False)
-
-# 2D displacement
-
-# number of particles
-col2D = len(disply.columns)
-# number of frames
-ind2D = len(disply.index)
-
-def calculate_displacement2D(displx, disply):
-    displ2D = pd.DataFrame(0, index=np.arange(ind2D), columns=np.arange(col2D), dtype=np.float64)
-    for j in range(col2D):
-        for i in range(ind2D):
-            d1 = displx.iat[i, j]
-            d2 = disply.iat[i, j]
-            displ2D.iat[i, j] = ((d2**2 + d1**2)**(1/2))
-    return displ2D
-
-
-# Calculate displacements between neighboring points
-displ2D = calculate_displacement2D(displx, disply)
-
-# set data for save
-displ2D.to_excel('C:/Users/1/Desktop/test/displacement2D.xlsx', 'Sheet1', index=False, header=False)
-'''
