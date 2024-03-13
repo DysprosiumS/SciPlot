@@ -1,0 +1,198 @@
+import pandas as pd
+import numpy as np
+import math
+
+# Physical parameters and constants
+particle_density = 1.5 #[g/cm^3] MF
+coating_density = 8.92 #[g/cm^3] Cu
+
+# Parameters of our experimental setup
+fps = 14.62# Frames per 1 second
+Scale = 0.3# Scale of our recording, [mkm/px]
+w = 0.5 #Coverage rate
+Diameter = 5 #Diameter of uncoated particle, [mkm]
+dc = 0.1 #Thickness of coating, [mkm]
+
+# Calculation of particle parameters
+Rp = Diameter/2
+Volume_particle = 4/3*math.pi*Rp**3 #[mkm^3]
+Volume_coating = 4/3*w*math.pi*((Rp+dc)**3-Rp**3)#[mkm^3]
+Volume_particle /= 10**12 #[cm^3]
+Volume_coating /= 10**12 #[cm^3]
+Mass = particle_density*Volume_particle + coating_density*Volume_coating #[g]
+Mass /= 1000 #[kg]
+
+
+# Read txt files and save raw data to xlsx tables
+coordsx = pd.read_csv(filepath_or_buffer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/X1000.txt', sep='\t',
+                      header=None, float_precision=None)
+coordsx.dropna(axis=1, inplace=True)
+coordsx.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/coordX.xlsx', sheet_name='Sheet1',
+                 index=False, header=False, float_format='%.6f')
+coordsy = pd.read_csv(filepath_or_buffer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/Y1000.txt', sep='\t',
+                      header=None)
+coordsy.dropna(axis=1, inplace=True)
+coordsy.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/coordY.xlsx', sheet_name='Sheet1',
+                 index=False, header=False, float_format='%.6f')
+
+# number of particles
+colx = len(coordsx.columns)
+# number of frames
+indx = len(coordsx.index)
+
+'''
+Code part to calculate displacements
+'''
+# Calculating displacements
+def calculate_displacement(coords):
+    displ = pd.DataFrame(data=0, index=np.arange(indx-1), columns=np.arange(colx), dtype=np.float64)
+    for j in range(colx):
+        for i in range(indx - 1):
+            x1 = coords.iat[i, j]
+            x2 = coords.iat[i+1, j]
+            displ.iat[i, j] = (x2 - x1)*Scale
+            displ.iat[i, j] =displ.iat[i, j].round(7)
+    return displ # in [mkm]
+
+# Calculate mean displacement of 2 axes (X and Y)
+def calculate_displacement_2D(displx, disply):
+    displ_2D = pd.DataFrame(data=0, index=np.arange(indx - 1), columns=np.arange(colx), dtype=np.float64)
+    for j in range(colx):
+        for i in range(indx - 1):
+            displ_x = displx.iat[i, j]
+            displ_y = disply.iat[i, j]
+            displ_2D.iat[i, j] = math.sqrt(displ_x**2 + displ_y**2)
+            displ_2D.iat[i, j] =displ_2D.iat[i, j].round(7)
+    return displ_2D
+
+# Calculate displacements between neighboring points on X
+displx = calculate_displacement(coordsx)
+# Calculate displacements between neighboring points on Y
+disply = calculate_displacement(coordsy)
+
+# Save displacement for both axes
+displx.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/displacementX.xlsx',
+                sheet_name='Sheet1', index=False, header=False)
+disply.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/displacementY.xlsx',
+                sheet_name='Sheet1', index=False, header=False)
+
+# Save displacement for 2D
+displ_2D = calculate_displacement_2D(displx,disply)
+displ_2D.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/displ_2D.xlsx',
+                  sheet_name='Sheet1', index=False, header=False)
+
+'''
+Code part to calculate velocities
+'''
+# Calculating velocities
+def calculate_velocity(displacements):
+    velocities = pd.DataFrame(data=0, index=np.arange(indx-1), columns=np.arange(colx), dtype=np.float64)
+    for j in range(colx):
+        for i in range(indx - 1):
+            displacement = displacements.iat[i, j]
+            velocities.iat[i, j] = displacement * fps
+            velocities.iat[i, j].round(8)
+    return velocities # in [mkm/s]
+
+# Calculate mean velocity of 2 axes (X and Y)
+def calculate_velocity_2D(velx, vely):
+    vel_2D = pd.DataFrame(data=0, index=np.arange(indx - 1), columns=np.arange(colx), dtype=np.float64)
+    for j in range(colx):
+        for i in range(indx - 1):
+            vel_x = velx.iat[i, j]
+            vel_y = vely.iat[i, j]
+            vel_2D.iat[i, j] = math.sqrt(vel_x**2 + vel_y**2)
+            vel_2D.iat[i, j] = vel_2D.iat[i, j].round(8)
+    return vel_2D
+
+velx = calculate_velocity(displx)
+vely = calculate_velocity(disply)
+vel_2D = calculate_velocity_2D(velx, vely)
+
+#Save velocities
+velx.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/velocityX.xlsx',
+                sheet_name='Sheet1', index=False, header=False)
+vely.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/velocityY.xlsx',
+                sheet_name='Sheet1', index=False, header=False)
+vel_2D.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/vel_2D.xlsx',
+                  sheet_name='Sheet1', index=False, header=False)
+
+'''
+Code part to calculate accelerations
+'''
+def calculate_acceleration(velocities):
+    accelerations = pd.DataFrame(data=0, index=np.arange(indx-1), columns=np.arange(colx), dtype=np.float64)
+    for j in range(colx):
+        for i in range(indx - 2):
+            velocity1 = velocities.iat[i, j]
+            velocity2 = velocities.iat[i+1, j]
+            accelerations.iat[i, j] = abs(velocity2-velocity1) * fps
+            accelerations.iat[i, j].round(9)
+    return accelerations # in [mkm/s^2]
+
+def calculate_acceleration_2D(accx, accy):
+    acc_2D = pd.DataFrame(data=0, index=np.arange(indx - 1), columns=np.arange(colx), dtype=np.float64)
+    for j in range(colx):
+        for i in range(indx - 1):
+            acc_x = accx.iat[i, j]
+            acc_y = accy.iat[i, j]
+            acc_2D.iat[i, j] = math.sqrt(acc_x**2 + acc_y**2)
+            acc_2D.iat[i, j] = acc_2D.iat[i, j].round(9)
+    return acc_2D
+
+accx = calculate_acceleration(velx)
+accy = calculate_acceleration(vely)
+acc_2D = calculate_acceleration_2D(accx, accy)
+
+#Save accelerations
+accx.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/accelerationX.xlsx',
+                sheet_name='Sheet1', index=False, header=False)
+accy.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/accelerationY.xlsx',
+                sheet_name='Sheet1', index=False, header=False)
+acc_2D.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/acc_2D.xlsx',
+                  sheet_name='Sheet1', index=False, header=False)
+
+'''
+Code part to calculate kinetic energies. Don't forget to choose J/eV!
+'''
+def calculate_kin_en(velocities):
+    kin_ens = pd.DataFrame(data=0, index=np.arange(indx-1), columns=np.arange(colx), dtype=np.float64)
+    for j in range(colx):
+        for i in range(indx - 1):
+            velocity = velocities.iat[i, j]
+            kin_ens.iat[i, j] = 0.5 * Mass * (velocity**2) # in [kg*mkm^2/s^2]
+#            kin_ens.iat[i, j] = 0.5 * Mass * (velocity**2)/10**12  # in [J]
+#            kin_ens.iat[i, j] = 0.5 * Mass * (velocity**2)*(10**7)/1.6  # in [eV]
+            kin_ens.iat[i, j].round(9)
+    return kin_ens # in [kg*mkm^2/s^2]
+
+kin_ens = calculate_kin_en(vel_2D)
+
+#Save energies
+kin_ens.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/kin_ens.xlsx',
+                sheet_name='Sheet1', index=False, header=False)
+
+'''
+Code part to calculate work of forces. Don't forget to choose J/eV!
+'''
+def calculate_work(accelerations, displacements):
+    works = pd.DataFrame(data=0, index=np.arange(indx-1), columns=np.arange(colx), dtype=np.float64)
+    for j in range(colx):
+        for i in range(indx - 2):
+            acceleration = accelerations.iat[i, j]
+            displacement = displacements.iat[i, j]
+            works.iat[i, j] = Mass * acceleration * displacement
+#            works.iat[i, j] = Mass * acceleration * displacement/10**12  # in [J]
+#            works.iat[i, j] = Mass * acceleration * displacement*(10**7)/1.6  # in [eV]
+            works.iat[i, j].round(9)
+    return works # in [kg*mkm^2/s^2]
+
+works_fors = calculate_work(acc_2D, displ_2D)
+
+#Save works of forces
+works_fors.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/mal.xlsx',
+                  sheet_name='Sheet1', index=False, header=False)
+
+'''
+Code part to calculate mean parameters
+'''
