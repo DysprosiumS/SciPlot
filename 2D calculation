@@ -7,11 +7,11 @@ particle_density = 1.5 #[g/cm^3] MF
 coating_density = 8.92 #[g/cm^3] Cu
 
 # Parameters of our experimental setup
-fps = 14.62# Frames per 1 second
-Scale = 0.3# Scale of our recording, [mkm/px]
-w = 0.5 #Coverage rate
+fps = 350# Frames per 1 second
+Scale = 13.4# Scale of our recording, [mkm/px]
+w = 1 #Coverage rate
 Diameter = 5 #Diameter of uncoated particle, [mkm]
-dc = 0.1 #Thickness of coating, [mkm]
+dc = 0.15 #Thickness of coating, [mkm]
 
 # Calculation of particle parameters
 Rp = Diameter/2
@@ -225,7 +225,6 @@ mean_work_eV = works_fors_eV.mean()
 '''
 Code part to calculate mean parameters
 '''
-
 #Save mean values
 with pd.ExcelWriter('C:/Users/17.3 Active Systems/Desktop/calculation/2D/mean.xlsx') as writer:
     mean_displ.to_excel(writer, sheet_name='Displ', index=False, header=False)
