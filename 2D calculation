@@ -22,6 +22,16 @@ Volume_coating /= 10**12 #[cm^3]
 Mass = particle_density*Volume_particle + coating_density*Volume_coating #[g]
 Mass /= 1000 #[kg]
 
+# Save particle parameters
+exp_set = pd.DataFrame(data=0, index=range(8), columns=range(1), dtype=np.float64)
+exp_set.iat[0,0] = 'Масса частицы, кг'
+exp_set.iat[1,0] = Mass
+exp_set.iat[2,0] = 'Объём частицы, м^3'
+exp_set.iat[3,0] = Volume_particle/10**6
+exp_set.iat[4,0] = 'Объём покрытия, м^3'
+exp_set.iat[5,0] = Volume_coating/10**6
+exp_set.iat[6,0] = 'Объём частицы с покрытием, м^3'
+exp_set.iat[7,0] = Volume_coating + Volume_coating
 
 # Read txt files and save raw data to xlsx tables
 coordsx = pd.read_csv(filepath_or_buffer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/X1000.txt', sep='\t',
@@ -227,6 +237,7 @@ Code part to calculate mean parameters
 '''
 #Save mean values
 with pd.ExcelWriter('C:/Users/17.3 Active Systems/Desktop/calculation/2D/mean.xlsx') as writer:
+    exp_set.to_excel(writer, sheet_name='Exp Setup', index=False, header=False)
     mean_displ.to_excel(writer, sheet_name='Displ', index=False, header=False)
     mean_vel.to_excel(writer, sheet_name='Vel', index=False, header=False)
     mean_acc.to_excel(writer, sheet_name='Accel', index=False, header=False)
