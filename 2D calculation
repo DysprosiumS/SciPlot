@@ -24,15 +24,15 @@ Mass /= 1000 #[kg]
 
 
 # Read txt files and save raw data to xlsx tables
-coordsx = pd.read_csv(filepath_or_buffer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/X1000.txt', sep='\t',
+coordsx = pd.read_csv(filepath_or_buffer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/X1000.txt', sep='\t',
                       header=None, float_precision=None)
 coordsx.dropna(axis=1, inplace=True)
-coordsx.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/coordX.xlsx', sheet_name='Sheet1',
+coordsx.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/coordX.xlsx', sheet_name='Sheet1',
                  index=False, header=False, float_format='%.6f')
-coordsy = pd.read_csv(filepath_or_buffer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/Y1000.txt', sep='\t',
+coordsy = pd.read_csv(filepath_or_buffer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/Y1000.txt', sep='\t',
                       header=None)
 coordsy.dropna(axis=1, inplace=True)
-coordsy.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/coordY.xlsx', sheet_name='Sheet1',
+coordsy.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/coordY.xlsx', sheet_name='Sheet1',
                  index=False, header=False, float_format='%.6f')
 
 # number of particles
@@ -71,15 +71,18 @@ displx = calculate_displacement(coordsx)
 disply = calculate_displacement(coordsy)
 
 # Save displacement for both axes
-displx.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/displacementX.xlsx',
+displx.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/displacementX.xlsx',
                 sheet_name='Sheet1', index=False, header=False)
-disply.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/displacementY.xlsx',
+disply.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/displacementY.xlsx',
                 sheet_name='Sheet1', index=False, header=False)
 
 # Save displacement for 2D
 displ_2D = calculate_displacement_2D(displx,disply)
-displ_2D.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/displ_2D.xlsx',
+displ_2D.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/displ_2D.xlsx',
                   sheet_name='Sheet1', index=False, header=False)
+
+#Mean displacement for every particle
+mean_displ = displ_2D.mean()
 
 '''
 Code part to calculate velocities
@@ -110,18 +113,21 @@ vely = calculate_velocity(disply)
 vel_2D = calculate_velocity_2D(velx, vely)
 
 #Save velocities
-velx.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/velocityX.xlsx',
+velx.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/velocityX.xlsx',
                 sheet_name='Sheet1', index=False, header=False)
-vely.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/velocityY.xlsx',
+vely.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/velocityY.xlsx',
                 sheet_name='Sheet1', index=False, header=False)
-vel_2D.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/vel_2D.xlsx',
+vel_2D.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/vel_2D.xlsx',
                   sheet_name='Sheet1', index=False, header=False)
+
+#Mean velocity for every particle
+mean_vel = vel_2D.mean()
 
 '''
 Code part to calculate accelerations
 '''
 def calculate_acceleration(velocities):
-    accelerations = pd.DataFrame(data=0, index=np.arange(indx-1), columns=np.arange(colx), dtype=np.float64)
+    accelerations = pd.DataFrame(data=0, index=np.arange(indx-2), columns=np.arange(colx), dtype=np.float64)
     for j in range(colx):
         for i in range(indx - 2):
             velocity1 = velocities.iat[i, j]
@@ -131,9 +137,9 @@ def calculate_acceleration(velocities):
     return accelerations # in [mkm/s^2]
 
 def calculate_acceleration_2D(accx, accy):
-    acc_2D = pd.DataFrame(data=0, index=np.arange(indx - 1), columns=np.arange(colx), dtype=np.float64)
+    acc_2D = pd.DataFrame(data=0, index=np.arange(indx - 2), columns=np.arange(colx), dtype=np.float64)
     for j in range(colx):
-        for i in range(indx - 1):
+        for i in range(indx - 2):
             acc_x = accx.iat[i, j]
             acc_y = accy.iat[i, j]
             acc_2D.iat[i, j] = math.sqrt(acc_x**2 + acc_y**2)
@@ -145,54 +151,87 @@ accy = calculate_acceleration(vely)
 acc_2D = calculate_acceleration_2D(accx, accy)
 
 #Save accelerations
-accx.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/accelerationX.xlsx',
+accx.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/accelerationX.xlsx',
                 sheet_name='Sheet1', index=False, header=False)
-accy.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/accelerationY.xlsx',
+accy.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/accelerationY.xlsx',
                 sheet_name='Sheet1', index=False, header=False)
-acc_2D.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/acc_2D.xlsx',
+acc_2D.to_excel(excel_writer='C:/Users/17.3 Active Systems/Desktop/calculation/2D/acc_2D.xlsx',
                   sheet_name='Sheet1', index=False, header=False)
+
+#Mean acceleration for every particle
+mean_acc = acc_2D.mean()
 
 '''
 Code part to calculate kinetic energies. Don't forget to choose J/eV!
 '''
-def calculate_kin_en(velocities):
-    kin_ens = pd.DataFrame(data=0, index=np.arange(indx-1), columns=np.arange(colx), dtype=np.float64)
+def calculate_kin_en(velocities, dimension):
+    kin_ens1 = pd.DataFrame(data=0, index=np.arange(indx-1), columns=np.arange(colx), dtype=np.float64)
+    kin_ens2 = pd.DataFrame(data=0, index=np.arange(indx-1), columns=np.arange(colx), dtype=np.float64)
     for j in range(colx):
         for i in range(indx - 1):
             velocity = velocities.iat[i, j]
-            kin_ens.iat[i, j] = 0.5 * Mass * (velocity**2) # in [kg*mkm^2/s^2]
-#            kin_ens.iat[i, j] = 0.5 * Mass * (velocity**2)/10**12  # in [J]
-#            kin_ens.iat[i, j] = 0.5 * Mass * (velocity**2)*(10**7)/1.6  # in [eV]
-            kin_ens.iat[i, j].round(9)
-    return kin_ens # in [kg*mkm^2/s^2]
+            kin_ens1.iat[i, j] = 0.5 * Mass * (velocity**2)/10**12  # in [J]
+            kin_ens2.iat[i, j] = 0.5 * Mass * (velocity**2)*(10**7)/1.6  # in [eV]
+            kin_ens1.iat[i, j].round(9)
+            kin_ens2.iat[i, j].round(9)
+    if dimension == 1:
+     return kin_ens1 # in [J]
+    if dimension == 2:
+     return kin_ens2 # in [eV]
 
-kin_ens = calculate_kin_en(vel_2D)
+kin_ens_J = calculate_kin_en(vel_2D, 1)
+kin_ens_eV = calculate_kin_en(vel_2D, 2)
 
 #Save energies
-kin_ens.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/kin_ens.xlsx',
-                sheet_name='Sheet1', index=False, header=False)
+with pd.ExcelWriter('C:/Users/17.3 Active Systems/Desktop/calculation/2D/kin_ens.xlsx') as writer:
+     kin_ens_J.to_excel(writer, sheet_name='Kin en J', index=False, header=False)
+     kin_ens_eV.to_excel(writer,sheet_name='Kin en eV', index=False, header=False)
+
+#Mean kinetic energy for every particle
+mean_kin_en_J = kin_ens_J.mean()
+mean_kin_en_eV = kin_ens_eV.mean()
 
 '''
 Code part to calculate work of forces. Don't forget to choose J/eV!
 '''
-def calculate_work(accelerations, displacements):
-    works = pd.DataFrame(data=0, index=np.arange(indx-1), columns=np.arange(colx), dtype=np.float64)
+def calculate_work(accelerations, displacements, dimension):
+    works_J = pd.DataFrame(data=0, index=np.arange(indx-2), columns=np.arange(colx), dtype=np.float64)
+    works_eV = pd.DataFrame(data=0, index=np.arange(indx-2), columns=np.arange(colx), dtype=np.float64)
     for j in range(colx):
         for i in range(indx - 2):
             acceleration = accelerations.iat[i, j]
             displacement = displacements.iat[i, j]
-            works.iat[i, j] = Mass * acceleration * displacement
-#            works.iat[i, j] = Mass * acceleration * displacement/10**12  # in [J]
-#            works.iat[i, j] = Mass * acceleration * displacement*(10**7)/1.6  # in [eV]
-            works.iat[i, j].round(9)
-    return works # in [kg*mkm^2/s^2]
+            works_J.iat[i, j] = Mass * acceleration * displacement/10**12  # in [J]
+            works_eV.iat[i, j] = Mass * acceleration * displacement*(10**7)/1.6  # in [eV]
+            works_J.iat[i, j].round(9)
+            works_eV.iat[i, j].round(9)
+    if dimension == 1:
+     return works_J # in [J]
+    if dimension == 2:
+     return works_eV # in [eV]
 
-works_fors = calculate_work(acc_2D, displ_2D)
+works_fors_J = calculate_work(acc_2D, displ_2D, 1)
+works_fors_eV = calculate_work(acc_2D, displ_2D, 2)
 
 #Save works of forces
-works_fors.to_excel(excel_writer='C:/Users/Senos/OneDrive/Рабочий стол/table calc/mal.xlsx',
-                  sheet_name='Sheet1', index=False, header=False)
+with pd.ExcelWriter('C:/Users/17.3 Active Systems/Desktop/calculation/2D/mal.xlsx') as writer:
+    works_fors_J.to_excel(writer, sheet_name='Work J', index=False, header=False)
+    works_fors_eV.to_excel(writer, sheet_name='Work eV', index=False, header=False)
+
+#Mean work of forces for every particle
+mean_work_J = works_fors_J.mean()
+mean_work_eV = works_fors_eV.mean()
 
 '''
 Code part to calculate mean parameters
 '''
+
+#Save mean values
+with pd.ExcelWriter('C:/Users/17.3 Active Systems/Desktop/calculation/2D/mean.xlsx') as writer:
+    mean_displ.to_excel(writer, sheet_name='Displ', index=False, header=False)
+    mean_vel.to_excel(writer, sheet_name='Vel', index=False, header=False)
+    mean_acc.to_excel(writer, sheet_name='Accel', index=False, header=False)
+    mean_kin_en_J.to_excel(writer, sheet_name='Kin en J', index=False, header=False)
+    mean_kin_en_eV.to_excel(writer, sheet_name='Kin en eV', index=False, header=False)
+    mean_work_J.to_excel(writer, sheet_name='Work J', index=False, header=False)
+    mean_work_eV.to_excel(writer, sheet_name='Work eV', index=False, header=False)
