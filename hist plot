@@ -1,0 +1,24 @@
+import pandas as pd
+import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+data = pd.read_excel('C:/Users/Senos/OneDrive/Рабочий стол/расчеты вихри через прогу/вихри/mean.xlsx',
+                     sheet_name='Vel mkm s')
+indx = len(data.columns)
+df = pd.DataFrame(data,index=np.arange(indx))
+
+plt.hist(data, bins=10, edgecolor='black')
+plt.xlabel('Velocity')
+plt.ylabel('N')
+plt.title('Distribution')
+sns_plot = sns.distplot(data)
+
+plt.show()
+fig = sns_plot.get_figure()
+
+'''
+https://seaborn.pydata.org/tutorial/introduction.html
+https://habr.com/ru/articles/470535/
+'''
