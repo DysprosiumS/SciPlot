@@ -212,7 +212,7 @@ def calculate_work(accelerations, displacements, dimension):
     works_eV = pd.DataFrame(data=0, index=np.arange(indx-2), columns=np.arange(colx), dtype=np.float64)
     if dimension == 1:
        for j in range(colx):
-         for i in range(indx - 1):
+         for i in range(indx - 2):
             acceleration = accelerations.iat[i, j]
             displacement = displacements.iat[i, j]
             works_J.iat[i, j] = Mass * acceleration * displacement/10**12  # in [J]
@@ -220,7 +220,7 @@ def calculate_work(accelerations, displacements, dimension):
        return works_J # in [J]
     if dimension == 2:
        for j in range(colx):
-         for i in range(indx - 1):
+         for i in range(indx - 2):
             acceleration = accelerations.iat[i, j]
             displacement = displacements.iat[i, j]
             works_eV.iat[i, j] = Mass * acceleration * displacement*(10**7)/1.6  # in [eV]
