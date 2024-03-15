@@ -15,3 +15,6 @@ Create 6 empty txt files and copy their paths to this code.
 
 !Attention!
 Dont forget to delete printing parts before use - these are only for cheking possible errors in calculation.
+
+!New(2)!
+Use 2D calc code
