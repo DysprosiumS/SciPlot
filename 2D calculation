@@ -245,9 +245,9 @@ Code part to create a file with mean parameters & experimental setup
 #Save mean values
 with pd.ExcelWriter('C:/Users/17.3 Active Systems/Desktop/calculation/2D/mean.xlsx') as writer:
     exp_set.to_excel(writer, sheet_name='Exp Setup', index=False, header=False)
-    mean_displ.to_excel(writer, sheet_name='Displ, mkm', index=False, header=False)
-    mean_vel.to_excel(writer, sheet_name='Vel, mkm/s', index=False, header=False)
-    mean_acc.to_excel(writer, sheet_name='Accel, mkm/s^2', index=False, header=False)
+    mean_displ.to_excel(writer, sheet_name='Displ mkm', index=False, header=False)
+    mean_vel.to_excel(writer, sheet_name='Vel mkms', index=False, header=False)
+    mean_acc.to_excel(writer, sheet_name='Accel mkms2', index=False, header=False)
     mean_kin_en_J.to_excel(writer, sheet_name='Kin en J', index=False, header=False)
     mean_kin_en_eV.to_excel(writer, sheet_name='Kin en eV', index=False, header=False)
     mean_work_J.to_excel(writer, sheet_name='Work J', index=False, header=False)
