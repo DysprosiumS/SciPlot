@@ -24,4 +24,7 @@ fig = sns_plot.get_figure()
 '''
 https://seaborn.pydata.org/tutorial/introduction.html
 https://habr.com/ru/articles/470535/
+https://seaborn.pydata.org/generated/seaborn.kdeplot.html
+http://seaborn.pydata.org/generated/seaborn.histplot.html
+https://seaborn.pydata.org/tutorial/introduction.html
 '''
